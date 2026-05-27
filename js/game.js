@@ -11,6 +11,26 @@
   var MAX_RESULTS = 8;
   var BLUR_DELAY  = 150; // ms before hiding search results on blur
 
+  // Countries that are historically interchangeable for guessing purposes.
+  // Each inner array is one equivalence group.
+  var EQUIVALENTS = [
+    ["RUS", "URS", "EUN"], // Russia / Soviet Union / Unified Team (1992)
+    ["GER", "GDR", "FRG"]  // Germany / East Germany / West Germany
+  ];
+
+  // If the player guesses an equivalent of an answer, return the answer's iso3.
+  // Otherwise return null (no match).
+  function resolveEquivalent(guessedIso3, top3Iso3) {
+    for (var g = 0; g < EQUIVALENTS.length; g++) {
+      var group = EQUIVALENTS[g];
+      if (group.indexOf(guessedIso3) === -1) continue;
+      for (var a = 0; a < top3Iso3.length; a++) {
+        if (group.indexOf(top3Iso3[a]) !== -1) return top3Iso3[a];
+      }
+    }
+    return null;
+  }
+
   // ---------------------------------------------------------------------------
   // Internal state
   // ---------------------------------------------------------------------------
@@ -493,9 +513,14 @@
       var top3     = state.puzzle.top3 || [];
       var top3Iso3 = top3.map(function (e) { return e ? e.iso3 : null; });
 
-      if (top3Iso3.indexOf(iso3) !== -1 && state.found.indexOf(iso3) === -1) {
-        // Correct guess.
-        state.found.push(iso3);
+      // Direct match, or equivalent (e.g. RUS accepted for URS answer).
+      var answerIso3 = top3Iso3.indexOf(iso3) !== -1
+        ? iso3
+        : resolveEquivalent(iso3, top3Iso3);
+
+      if (answerIso3 !== null && state.found.indexOf(answerIso3) === -1) {
+        // Correct guess — track by the answer's iso3 so the slot renders correctly.
+        state.found.push(answerIso3);
 
         if (state.found.length >= MAX_FOUND) {
           // Player found all 3 — win!

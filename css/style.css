@@ -348,6 +348,8 @@ body {
 .search-input:focus {
   border-color: var(--color-accent);
   box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
+  /* Give the browser room for the dropdown when it scrolls the input into view */
+  scroll-margin-bottom: calc(4 * 44px + 24px);
 }
 
 /* Dropdown results */
@@ -365,6 +367,7 @@ body {
   overflow-y: auto;
   max-height: calc(8 * 44px); /* 8 rows */
   z-index: 100;
+  overscroll-behavior: contain; /* prevent scroll bubbling to page */
 }
 
 /* JS removes the hidden attribute to show */
@@ -590,6 +593,11 @@ body {
   .history-table th,
   .history-table td {
     font-size: 0.72rem;
+  }
+
+  /* Cap dropdown to 4 rows on small screens so it fits above the keyboard */
+  .search-results {
+    max-height: calc(4 * 44px);
   }
 }
 

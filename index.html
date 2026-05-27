@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Olympic Medals</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- History overlay panel -->
+  <div id="history-panel" class="history-panel" aria-hidden="true">
+    <div class="history-panel__inner">
+      <div class="history-panel__header">
+        <h2 class="history-panel__title">Past Results</h2>
+        <button class="history-panel__close" id="history-close-btn" aria-label="Close history">&times;</button>
+      </div>
+      <div class="history-panel__body">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Event</th>
+              <th>Result</th>
+              <th>Strikes</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody id="history-rows">
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+        <p class="history-empty" id="history-empty">No games played yet.</p>
+      </div>
+    </div>
+  </div>
+  <div class="history-backdrop" id="history-backdrop"></div>
+
+  <!-- Main game card -->
+  <div class="page-wrap">
+
+    <!-- Header -->
+    <header class="site-header">
+      <div class="site-header__left">
+        <h1 class="site-title">Olympic Medals</h1>
+        <p class="site-date" id="site-date"></p>
+      </div>
+      <button class="btn-icon" id="history-btn" aria-label="View history">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+        History
+      </button>
+    </header>
+
+    <main class="game-card">
+
+      <!-- Win/loss message banner -->
+      <div id="message-banner" class="message-banner" aria-live="polite" hidden>
+        <span class="message-banner__text"></span>
+      </div>
+
+      <!-- Event info -->
+      <section class="event-section" aria-label="Today's puzzle">
+        <p class="event-label">Today's event</p>
+        <h2 id="puzzle-event" class="event-name">Loading&hellip;</h2>
+        <p id="puzzle-gender" class="event-gender"></p>
+        <p id="puzzle-season" class="event-season"></p>
+        <p class="event-instruction">Name the top 3 countries by all-time medal count</p>
+      </section>
+
+      <!-- Found slots -->
+      <section class="found-section" aria-label="Found countries">
+        <ol id="found-list" class="found-list">
+          <li class="found-slot" data-slot="1">
+            <span class="found-slot__rank">1</span>
+            <span class="found-slot__country">?</span>
+            <span class="found-slot__medals"></span>
+          </li>
+          <li class="found-slot" data-slot="2">
+            <span class="found-slot__rank">2</span>
+            <span class="found-slot__country">?</span>
+            <span class="found-slot__medals"></span>
+          </li>
+          <li class="found-slot" data-slot="3">
+            <span class="found-slot__rank">3</span>
+            <span class="found-slot__country">?</span>
+            <span class="found-slot__medals"></span>
+          </li>
+        </ol>
+      </section>
+
+      <!-- Strikes -->
+      <section class="strikes-section" aria-label="Strikes">
+        <p class="strikes-label">Strikes</p>
+        <div id="strikes-display" class="strikes-display" role="img" aria-label="0 of 5 strikes used">
+          <span class="strike-dot" data-strike="1"></span>
+          <span class="strike-dot" data-strike="2"></span>
+          <span class="strike-dot" data-strike="3"></span>
+          <span class="strike-dot" data-strike="4"></span>
+          <span class="strike-dot" data-strike="5"></span>
+        </div>
+      </section>
+
+      <!-- Search -->
+      <section class="search-section" aria-label="Country search">
+        <div class="search-wrapper">
+          <input
+            id="search-input"
+            class="search-input"
+            type="text"
+            placeholder="Type a country name&hellip;"
+            autocomplete="off"
+            autocorrect="off"
+            spellcheck="false"
+            aria-label="Search for a country"
+            aria-autocomplete="list"
+            aria-controls="search-results"
+            aria-expanded="false"
+          />
+          <ul
+            id="search-results"
+            class="search-results"
+            role="listbox"
+            aria-label="Country suggestions"
+            hidden
+          >
+            <!-- Populated by JS -->
+          </ul>
+        </div>
+      </section>
+
+      <!-- Post-game area -->
+      <div id="play-again-area" class="play-again-area" hidden>
+        <p class="play-again-headline">Come back tomorrow!</p>
+        <p class="play-again-countdown" id="next-puzzle-countdown"></p>
+      </div>
+
+    </main>
+
+    <footer class="site-footer">
+      <p>A daily Olympic trivia game</p>
+    </footer>
+
+  </div>
+
+  <!-- Scripts — order is critical -->
+  <script src="data/puzzles.js"></script>
+  <script src="js/countries.js"></script>
+  <script src="js/game.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => Game.init());
+  </script>
+</body>
+</html>
